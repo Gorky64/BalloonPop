@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:title="@string/resetH"
+        android:summary="@string/resetHSSummary"
+        android:key="resetKEY"/>
+    <Preference
+        android:title="@string/easy"
+        android:summary="@string/easySum"
+        android:key="easyKEY"/>
+    <Preference
+        android:title="@string/medium"
+        android:summary="@string/medSum"
+        android:key="mediumKEY"/>
+    <Preference
+        android:title="@string/hard"
+        android:summary="@string/hardSum"
+        android:key="hardKEY"/>
+
+
+</PreferenceScreen>
