@@ -46,13 +46,14 @@ public class PopOnView extends View {
     //Max lives
     public static int MAX_LIVES = 7;
     private static final int NEW_LEVEL = 10;
+    //SoundPool
     public static final int HIT_SOUND_ID = 1;
     public static final int MISS_SOUND_ID = 2;
     public static final int DISAPPEAR_SOUND_ID = 3;
     public static final int SOUND_PRIORITY = 1;
     private static final int SOUND_QUALITY = 400;
     private static final int MAX_STREAMS = 1;
-    public static final Queue<ImageView> spots = new ConcurrentLinkedQueue<>();
+    public static final Queue<ImageView> balloons = new ConcurrentLinkedQueue<>();
     public static final Queue<Animator> animators = new ConcurrentLinkedQueue<>();
     public static SharedPreferences preferences;
     private int balloonTouched;
@@ -72,12 +73,12 @@ public class PopOnView extends View {
     private RelativeLayout relativeLayout;
     private Resources resources;
     private LayoutInflater layoutInflater;
-    private Handler spotHandler;
+    private Handler balloonHandler;
     public static SoundPool soundPool;
     public static int volume;
-    private Runnable addSpotRunnable = new Runnable() {
+    private Runnable addBalloonRunnable = new Runnable() {
         public void run() {
-            addNewSpot();
+            addNewBalloon();
         }
     };
 
@@ -92,7 +93,7 @@ public class PopOnView extends View {
         highScoreTextView = (TextView) relativeLayout.findViewById(R.id.highScoreTextView);
         currentScoreTextView = (TextView) relativeLayout.findViewById(R.id.currentScoreTextView);
         levelTextView = (TextView) relativeLayout.findViewById(R.id.levelTextView);
-        spotHandler = new Handler();
+        balloonHandler = new Handler();
     }
 
     @Override
@@ -111,12 +112,12 @@ public class PopOnView extends View {
     public void cancelAnimations() {
         for (Animator animator : animators)
             animator.cancel();
-        for (ImageView view : spots)
+        for (ImageView view : balloons)
             relativeLayout.removeView(view);
 
-        spotHandler.removeCallbacks(addSpotRunnable);
+        balloonHandler.removeCallbacks(addBalloonRunnable);
         animators.clear();
-        spots.clear();
+        balloons.clear();
     }
 
     public void resume(Context context) {
@@ -127,7 +128,7 @@ public class PopOnView extends View {
     }
 
     public void resetGame() {
-        spots.clear();
+        balloons.clear();
         animators.clear();
         livesLinearLayout.removeAllViews();
         animationTime = INITIAL_ANIMATION_DURATION;
@@ -141,7 +142,7 @@ public class PopOnView extends View {
             livesLinearLayout.addView(layoutInflater.inflate(R.layout.life, null));
         }
         for (int i = 1; i <= INITIAL_BALLOON; i++)
-            spotHandler.postDelayed(addSpotRunnable, i * BALLOON_DELAY);
+            balloonHandler.postDelayed(addBalloonRunnable, i * BALLOON_DELAY);
     }
 
     private void displayScores() {
@@ -162,34 +163,34 @@ public class PopOnView extends View {
 
     }
 
-    public void addNewSpot() {
+    public void addNewBalloon() {
         int x = random.nextInt(viewWidth - BALLOON_DIAMETER);
         int y = random.nextInt(viewHeight - BALLOON_DIAMETER);
         int x2 = random.nextInt(viewWidth - BALLOON_DIAMETER);
         int y2 = random.nextInt(viewHeight - BALLOON_DIAMETER);
-        final ImageView spot = (ImageView) layoutInflater.inflate(R.layout.untouched, null);
-        spots.add(spot);
-        spot.setLayoutParams(new RelativeLayout.LayoutParams(BALLOON_DIAMETER, BALLOON_DIAMETER));
-        spot.setImageResource(random.nextInt(2) == 0 ? R.drawable.balloon_blue : R.drawable.balloon_green);
-        spot.setX(x);
-        spot.setY(y);
-        spot.setOnClickListener(new OnClickListener() {
+        final ImageView balloon = (ImageView) layoutInflater.inflate(R.layout.untouched, null);
+        balloons.add(balloon);
+        balloon.setLayoutParams(new RelativeLayout.LayoutParams(BALLOON_DIAMETER, BALLOON_DIAMETER));
+        balloon.setImageResource(random.nextInt(2) == 0 ? R.drawable.balloon_blue : R.drawable.balloon_green);
+        balloon.setX(x);
+        balloon.setY(y);
+        balloon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                touchedSpot(spot);
+                touchedBalloon(balloon);
             }
         });
 
-        relativeLayout.addView(spot);
-        spot.animate().x(x2).y(y2).scaleX(SCALE_X).scaleY(SCALE_Y).setDuration(animationTime).setListener(new AnimatorListenerAdapter() {
+        relativeLayout.addView(balloon);
+        balloon.animate().x(x2).y(y2).scaleX(SCALE_X).scaleY(SCALE_Y).setDuration(animationTime).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
                 animators.add(animation);
             }
             public void onAnimationEnd(Animator animation) {
                 animators.remove(animation);
-                if (!gamePaused && spots.contains(spot)) {
-                    missedSpot(spot);
+                if (!gamePaused && balloons.contains(balloon)) {
+                    missedBalloon(balloon);
                 }
             }
 
@@ -206,9 +207,9 @@ public class PopOnView extends View {
         return true;
     }
 
-    private void touchedSpot(ImageView spot) {
-        relativeLayout.removeView(spot);
-        spots.remove(spot);
+    private void touchedBalloon(ImageView balloon) {
+        relativeLayout.removeView(balloon);
+        balloons.remove(balloon);
         ++balloonTouched;
         score += 10 * level;
 
@@ -225,12 +226,12 @@ public class PopOnView extends View {
         }
         displayScores();
         if (!gameOver)
-            addNewSpot();
+            addNewBalloon();
     }
 
-    public void missedSpot(ImageView spot) {
-        spots.remove(spot);
-        relativeLayout.removeView(spot);
+    public void missedBalloon(ImageView balloon) {
+        balloons.remove(balloon);
+        relativeLayout.removeView(balloon);
         if (gameOver)
             return;
         if (soundPool != null)
@@ -259,7 +260,7 @@ public class PopOnView extends View {
             dialogBuilder.show();
         } else {
             livesLinearLayout.removeViewAt(livesLinearLayout.getChildCount() - 1);
-            addNewSpot();
+            addNewBalloon();
         }
     }
 

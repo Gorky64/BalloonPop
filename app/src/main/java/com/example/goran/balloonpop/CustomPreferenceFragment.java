@@ -14,7 +14,7 @@ import static com.example.goran.balloonpop.PopOnView.preferences;
  */
 
 public class CustomPreferenceFragment extends PreferenceFragment {
-
+    //High score reset
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +35,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
             }
 
         });
-
+        //Easy Difficulty
         Preference easyPref = findPreference("easyKEY");
         easyPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -51,6 +51,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
             }
 
         });
+        //Medium Difficulty
         Preference mediumPref = findPreference("mediumKEY");
         mediumPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -66,6 +67,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
             }
 
         });
+        //Hard Difficulty
         Preference hardPref = findPreference("hardKEY");
         hardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
