@@ -109,6 +109,7 @@ public class PopOnView extends View {
         cancelAnimations();
     }
 
+    //Canceling the animations
     public void cancelAnimations() {
         for (Animator animator : animators)
             animator.cancel();
@@ -127,6 +128,7 @@ public class PopOnView extends View {
             resetGame();
     }
 
+    //Resetting the game
     public void resetGame() {
         balloons.clear();
         animators.clear();
@@ -145,12 +147,14 @@ public class PopOnView extends View {
             balloonHandler.postDelayed(addBalloonRunnable, i * BALLOON_DELAY);
     }
 
+    //Current and all time high score
     private void displayScores() {
         highScoreTextView.setText(resources.getString(R.string.high_score) + " " + highScore);
         currentScoreTextView.setText(resources.getString(R.string.current_score) + " " + score);
         levelTextView.setText(resources.getString(R.string.level) + " " + level);
     }
 
+    //Sound effects - SoundPool with  Map
     public static void initializeSoundEffects(Context context) {
         soundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, SOUND_QUALITY);
         AudioManager manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -163,6 +167,7 @@ public class PopOnView extends View {
 
     }
 
+    //Balloon spawn
     public void addNewBalloon() {
         int x = random.nextInt(viewWidth - BALLOON_DIAMETER);
         int y = random.nextInt(viewHeight - BALLOON_DIAMETER);
@@ -181,6 +186,7 @@ public class PopOnView extends View {
             }
         });
 
+        //Adding and removing balloons
         relativeLayout.addView(balloon);
         balloon.animate().x(x2).y(y2).scaleX(SCALE_X).scaleY(SCALE_Y).setDuration(animationTime).setListener(new AnimatorListenerAdapter() {
             @Override
@@ -197,6 +203,7 @@ public class PopOnView extends View {
         });
     }
 
+    //Touch event - missed a balloon, score and sound effect
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (soundPool != null)
@@ -207,6 +214,7 @@ public class PopOnView extends View {
         return true;
     }
 
+    //Touch event - touched a balloon, score and sound effect
     private void touchedBalloon(ImageView balloon) {
         relativeLayout.removeView(balloon);
         balloons.remove(balloon);
@@ -229,6 +237,7 @@ public class PopOnView extends View {
             addNewBalloon();
     }
 
+    //Balloon de-spawned, Shared Preferences for keeping the high score
     public void missedBalloon(ImageView balloon) {
         balloons.remove(balloon);
         relativeLayout.removeView(balloon);
@@ -246,6 +255,7 @@ public class PopOnView extends View {
             }
             cancelAnimations();
 
+            //Restart game dialog
             Builder dialogBuilder = new Builder(getContext());
             dialogBuilder.setTitle(R.string.game_over);
             dialogBuilder.setMessage(resources.getString(R.string.current_score) + " " + score);
