@@ -225,7 +225,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
                 editor.putInt(HIGH_SCORE, 0);
                 editor.apply();
                 PopOnView.highScore = 0;
-                Toast.makeText(getActivity(), "High score set to 0",
+                Toast.makeText(getActivity(), "High score set to 0.",
                         Toast.LENGTH_LONG).show();
 
 
