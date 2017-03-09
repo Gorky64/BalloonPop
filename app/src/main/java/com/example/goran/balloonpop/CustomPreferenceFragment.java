@@ -27,7 +27,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
                 editor.putInt(HIGH_SCORE, 0);
                 editor.apply();
                 PopOnView.highScore = 0;
-                Toast.makeText(getActivity(), "High score set to 0",
+                Toast.makeText(getActivity(), "High score set to 0.",
                         Toast.LENGTH_LONG).show();
 
 
@@ -45,7 +45,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
                 PopOnView.MAX_LIVES=7;
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.apply();
-                Toast.makeText(getActivity(), "Difficulty set to EASY",
+                Toast.makeText(getActivity(), "Difficulty set to EASY.",
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -61,7 +61,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
                 PopOnView.MAX_LIVES=6;
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.apply();
-                Toast.makeText(getActivity(), "Difficulty set to MEDIUM",
+                Toast.makeText(getActivity(), "Difficulty set to MEDIUM.",
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -78,7 +78,7 @@ public class CustomPreferenceFragment extends PreferenceFragment {
                 PopOnView.BALLOON_DELAY=350;
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.apply();
-                Toast.makeText(getActivity(), "Difficulty set to HARD",
+                Toast.makeText(getActivity(), "Difficulty set to HARD.",
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
