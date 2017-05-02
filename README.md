@@ -1,13 +1,13 @@
 # BalloonPop
 ![alt text](http://i.imgur.com/WWmPvZT.jpg "Balloon Popper Game")
 
-#About the application
+# About the application
 * A simple game where the goal is to pop (touch) as many balloons as you can.
 * If you miss a balloon, your score gets deducted.
 * If a balloon de-spawns ( animation runs out ) you lose a life.
 * When all lives are depleted game ends.
 
-#The code
+# The code
 Game logic is contained in PopOnView class.
 
 ```java
